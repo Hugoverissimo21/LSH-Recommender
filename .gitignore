@@ -172,5 +172,8 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# ignore local/system files
 .DS_Store
-/data
+/data/*.csv
+/data/*.dat
