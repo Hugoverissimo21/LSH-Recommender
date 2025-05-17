@@ -14,6 +14,8 @@
 
     - results/ : pasta com predictions para cada dataset
 
+note that between each step the code might have changed a bit, but the main idea is the same
+
 ## MovieLens Datasets
 
 ### 100k
