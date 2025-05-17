@@ -1,0 +1,2 @@
+input_file,time,rmse,mae,bucket_length,num_hash_tables,threshold,timestamp
+data/100k.csv,41.53850507736206,0.9171897670990808,0.7001837403928066,2.0,1,1.2,20250518_002613
