@@ -538,5 +538,86 @@
         "rmse": 0.8938764358743189,
         "mae": 0.6861297310673224,
         "time": 359.284
+    },
+    "(0.6, 6, 0.3)": {
+        "bucketLength": 0.6,
+        "numHashTables": 6,
+        "threshold": 0.3,
+        "n_validations": 5,
+        "rmse": 1.1589093490192073,
+        "mae": 0.9411087265433526,
+        "time": 110.70599999999999
+    },
+    "(1.4, 4, 0.2)": {
+        "bucketLength": 1.4,
+        "numHashTables": 4,
+        "threshold": 0.2,
+        "n_validations": 5,
+        "rmse": 1.1586417648208278,
+        "mae": 0.940910588578052,
+        "time": 74.52000000000001
+    },
+    "(1.2, 3, 0.3)": {
+        "bucketLength": 1.2,
+        "numHashTables": 3,
+        "threshold": 0.3,
+        "n_validations": 5,
+        "rmse": 1.1589093490192073,
+        "mae": 0.9411087265433526,
+        "time": 64.736
+    },
+    "(1.5, 2, 0.2)": {
+        "bucketLength": 1.5,
+        "numHashTables": 2,
+        "threshold": 0.2,
+        "n_validations": 5,
+        "rmse": 1.1586417648208278,
+        "mae": 0.940910588578052,
+        "time": 52.758
+    },
+    "(1.8, 4, 0.2)": {
+        "bucketLength": 1.8,
+        "numHashTables": 4,
+        "threshold": 0.2,
+        "n_validations": 5,
+        "rmse": 1.1586417648208278,
+        "mae": 0.940910588578052,
+        "time": 77.142
+    },
+    "(1.0, 6, 0.2)": {
+        "bucketLength": 1.0,
+        "numHashTables": 6,
+        "threshold": 0.2,
+        "n_validations": 5,
+        "rmse": 1.1586417648208278,
+        "mae": 0.940910588578052,
+        "time": 115.21799999999999
+    },
+    "(1.8, 5, 0.1)": {
+        "bucketLength": 1.8,
+        "numHashTables": 5,
+        "threshold": 0.1,
+        "n_validations": 5,
+        "rmse": 1.158846174238637,
+        "mae": 0.941108140922438,
+        "time": 90.454
+    },
+    "(0.8, 2, 0.1)": {
+        "bucketLength": 0.8,
+        "numHashTables": 2,
+        "threshold": 0.1,
+        "n_validations": 5,
+        "rmse": 1.158846174238637,
+        "mae": 0.941108140922438,
+        "time": 38.794
+    },
+    "(0.6, 8, 0.1)": {
+        "bucketLength": 0.6,
+        "numHashTables": 8,
+        "threshold": 0.1,
+        "n_validations": 5,
+        "rmse": 1.158846174238637,
+        "mae": 0.941108140922438,
+        "time": 149.438
     }
 }

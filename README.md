@@ -2,11 +2,13 @@
 
 ## Project Structure
 
-- prototype.ipynb : criar um q funcione e bem explicado
+1. prototype.ipynb : criar um q funcione e bem explicado
 
-- tuning.ipynb : melhorar os hyperparâmetros
+2. tuning.ipynb : melhorar os hyperparâmetros e pequenos tweaks no codigo
 
-- deploy.py : mais eficiente, e menos debugging-friendly
+    - tunning.json: resultados do tuning
+
+3. deploy.py : mais eficiente, e menos debugging-friendly
 
 ## MovieLens Datasets
 
