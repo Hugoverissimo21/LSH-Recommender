@@ -53,10 +53,10 @@ data = spark.read.csv(input_file, header=True, inferSchema=True) \
             .select("userId", "movieId", "rating")
 
 # split in train and test
-train, test = data.randomSplit([0.9, 0.1], seed=42)
+train, test = data.randomSplit([0.9, 0.1])
 
-# start similarities timer
-start_fit = time.time()
+# start timer
+start = time.time()
 
 # create a user index to make sure its continuous
 user_index = train.select("userId").distinct().withColumn(
@@ -107,12 +107,6 @@ neighbors_cosine = neighbors.withColumn(
 reverse = neighbors_cosine.selectExpr("movie_j as movie_i", "movie_i as movie_j", "cosine_sim")
 similarities = neighbors_cosine.union(reverse)
 
-# end similarities timer
-end_fit = time.time()
-
-# start predictions timer
-start_pred = time.time()
-
 # get the predictions (check prototype for more details)
 test_with_ratings = test.alias("t") \
     .join(similarities.alias("s"), col("t.movieId") == col("s.movie_i")) \
@@ -138,14 +132,14 @@ final = predictions.alias("p").join(
     col("t.rating").alias("actual_rating")
 )
 
-# end predictions timer
-end_pred = time.time()
-
 # evaluate the predictions (check prototype for more details)
 evaluator = RegressionEvaluator(metricName="rmse", labelCol="actual_rating", predictionCol="pred_rating")
 rmse = evaluator.evaluate(final)
 mae_evaluator = RegressionEvaluator(metricName="mae", labelCol="actual_rating", predictionCol="pred_rating")
 mae = mae_evaluator.evaluate(final)
+
+# end timer
+end = time.time()
 
 
 # === Save the results ===
@@ -155,8 +149,7 @@ final.write.option("header", "true").mode("overwrite").csv(f"{saved_results_fold
 
 # save metrics into other csv file
 metrics = {"input_file": input_file,
-           "fit_time": end_fit - start_fit,
-           "pred_time": end_pred - start_pred,
+           "time": end - start,
            "rmse": rmse,
            "mae": mae,
            "bucket_length": bucket_length,
