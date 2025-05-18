@@ -4,6 +4,8 @@ import os
 import pandas as pd
 
 from pyspark.sql import SparkSession
+from pyspark.sql.window import Window
+from pyspark.sql.functions import row_number
 from pyspark.sql.functions import collect_list, struct
 from pyspark.ml.linalg import Vectors, SparseVector
 from pyspark.sql import Row, DataFrame
@@ -37,6 +39,7 @@ threshold = args.threshold
 saved_results_folder = "results"
 saved_metrics_file = "results.csv"
 
+
 # === Main Code ===
 # create spark session
 spark = SparkSession.builder \
@@ -52,18 +55,25 @@ data = spark.read.csv(input_file, header=True, inferSchema=True) \
 # split in train and test
 train, test = data.randomSplit([0.9, 0.1], seed=42)
 
-# start timer
-start = time.time()
+# start similarities timer
+start_fit = time.time()
+
+# create a user index to make sure its continuous
+user_index = train.select("userId").distinct().withColumn(
+    "user_idx",
+    row_number().over(Window.orderBy("userId")) - 1
+)
+train = train.join(user_index, on="userId")
 
 # get the similarities (check prototype for more details)
-num_users = train.select("userId").distinct().count()
+num_users = user_index.count()
 def to_sparse_vector(user_ratings, size):
-    sorted_pairs = sorted(user_ratings, key=lambda x: x.userId)
-    indices = [x.userId - 1 for x in sorted_pairs]
+    sorted_pairs = sorted(user_ratings, key=lambda x: x.user_idx)
+    indices = [x.user_idx for x in sorted_pairs]
     values = [x.rating for x in sorted_pairs]
     return Vectors.sparse(size, indices, values)
 item_user = train.groupBy("movieId") \
-    .agg(collect_list(struct("userId", "rating")).alias("user_ratings"))
+    .agg(collect_list(struct("user_idx", "rating")).alias("user_ratings"))
 item_vector_rdd = item_user.rdd.map(
     lambda row: Row(
         movieId=row["movieId"],
@@ -97,6 +107,12 @@ neighbors_cosine = neighbors.withColumn(
 reverse = neighbors_cosine.selectExpr("movie_j as movie_i", "movie_i as movie_j", "cosine_sim")
 similarities = neighbors_cosine.union(reverse)
 
+# end similarities timer
+end_fit = time.time()
+
+# start predictions timer
+start_pred = time.time()
+
 # get the predictions (check prototype for more details)
 test_with_ratings = test.alias("t") \
     .join(similarities.alias("s"), col("t.movieId") == col("s.movie_i")) \
@@ -122,14 +138,14 @@ final = predictions.alias("p").join(
     col("t.rating").alias("actual_rating")
 )
 
+# end predictions timer
+end_pred = time.time()
+
 # evaluate the predictions (check prototype for more details)
 evaluator = RegressionEvaluator(metricName="rmse", labelCol="actual_rating", predictionCol="pred_rating")
 rmse = evaluator.evaluate(final)
 mae_evaluator = RegressionEvaluator(metricName="mae", labelCol="actual_rating", predictionCol="pred_rating")
 mae = mae_evaluator.evaluate(final)
-
-# end timer
-end = time.time()
 
 
 # === Save the results ===
@@ -139,7 +155,8 @@ final.write.option("header", "true").mode("overwrite").csv(f"{saved_results_fold
 
 # save metrics into other csv file
 metrics = {"input_file": input_file,
-           "time": end - start,
+           "fit_time": end_fit - start_fit,
+           "pred_time": end_pred - start_pred,
            "rmse": rmse,
            "mae": mae,
            "bucket_length": bucket_length,
