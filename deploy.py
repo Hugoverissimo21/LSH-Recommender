@@ -44,8 +44,12 @@ saved_metrics_file = "results.csv"
 # create spark session
 spark = SparkSession.builder \
     .appName("ItemItemCF") \
-    .config("spark.driver.memory", "6g") \
-    .config("spark.executor.memory", "6g") \
+    .master("local[8]") \
+    .config("spark.driver.memory", "60g") \
+    .config("spark.executor.memory", "60g") \
+    .config("spark.executor.cores", "8") \
+    .config("spark.local.dir", "/users5/uvlabuaveiro/curso07/spark_tmp") \
+    .config("spark.memory.fraction", "0.8") \
     .getOrCreate()
 
 # read the data
