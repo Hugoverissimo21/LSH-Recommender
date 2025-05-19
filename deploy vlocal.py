@@ -2,7 +2,6 @@ import argparse
 import time
 import os
 import pandas as pd
-import shutil
 
 from pyspark.sql import SparkSession
 from pyspark.sql.window import Window
@@ -15,7 +14,6 @@ from pyspark.ml.feature import BucketedRandomProjectionLSH
 from pyspark.sql.functions import col
 from pyspark.sql.functions import sum as sql_sum, col
 from pyspark.sql.functions import coalesce, lit
-from pyspark import StorageLevel
 from pyspark.ml.evaluation import RegressionEvaluator
 
 
@@ -48,10 +46,6 @@ spark = SparkSession.builder \
     .appName("ItemItemCF") \
     .config("spark.driver.memory", "6g") \
     .config("spark.executor.memory", "6g") \
-    .config("spark.sql.execution.useObjectHashAggregateExec", "false") \
-    .config("spark.local.dir", "/tmp/spark") \
-    .config("spark.shuffle.spill.compress", "true") \
-    .config("spark.shuffle.compress", "true") \
     .getOrCreate()
 
 # read the data
@@ -60,8 +54,6 @@ data = spark.read.csv(input_file, header=True, inferSchema=True) \
 
 # split in train and test
 train, test = data.randomSplit([0.9, 0.1])
-train = train.repartition(32).persist(StorageLevel.MEMORY_AND_DISK)
-test = test.repartition(32).persist(StorageLevel.MEMORY_AND_DISK)
 
 # start timer
 start = time.time()
@@ -88,7 +80,7 @@ item_vector_rdd = item_user.rdd.map(
         features=to_sparse_vector(row["user_ratings"], num_users)
     )
 )
-item_vectors = spark.createDataFrame(item_vector_rdd).repartition(32).persist(StorageLevel.DISK_ONLY)
+item_vectors = spark.createDataFrame(item_vector_rdd)
 normalizer = Normalizer(inputCol="features", outputCol="norm_features", p=2.0)
 normalized = normalizer.transform(item_vectors)
 lsh = BucketedRandomProjectionLSH(
@@ -115,17 +107,6 @@ neighbors_cosine = neighbors.withColumn(
 reverse = neighbors_cosine.selectExpr("movie_j as movie_i", "movie_i as movie_j", "cosine_sim")
 similarities = neighbors_cosine.union(reverse)
 
-# keep only the best neighbors for each movie
-windowSpec = Window.partitionBy("movie_i").orderBy(col("cosine_sim").desc())
-similarities = similarities.withColumn("rank", row_number().over(windowSpec)) \
-                                  .filter(col("rank") <= 1) \
-                                  .drop("rank")
-
-
-similarities.write.option("header", "true").mode("overwrite").csv("23rexfzt.csv")
-
-
-
 # get the predictions (check prototype for more details)
 test_with_ratings = test.alias("t") \
     .join(similarities.alias("s"), col("t.movieId") == col("s.movie_i")) \
@@ -149,8 +130,7 @@ final = predictions.alias("p").join(
     col("t.movieId"),
     coalesce(col("p.pred_rating"), lit(3.0)).alias("pred_rating"),
     col("t.rating").alias("actual_rating")
-).persist(StorageLevel.DISK_ONLY)
-final.limit(1).collect() # wake up, don't be lazy
+)
 
 # evaluate the predictions (check prototype for more details)
 evaluator = RegressionEvaluator(metricName="rmse", labelCol="actual_rating", predictionCol="pred_rating")
@@ -190,4 +170,3 @@ updated.to_csv(saved_metrics_file, index=False)
 
 # === Clean up ===
 spark.stop()
-shutil.rmtree("/tmp/spark", ignore_errors=True)

@@ -45,11 +45,13 @@ saved_metrics_file = "results.csv"
 spark = SparkSession.builder \
     .appName("ItemItemCF") \
     .master("local[8]") \
-    .config("spark.driver.memory", "60g") \
-    .config("spark.executor.memory", "60g") \
     .config("spark.executor.cores", "8") \
+    .config("spark.driver.memory", "50g") \
+    .config("spark.executor.memory", "50g") \
+    .config("spark.memory.fraction", "0.9") \
+    .config("spark.shuffle.spill.compress", "true") \
+    .config("spark.shuffle.compress", "true") \
     .config("spark.local.dir", "/users5/uvlabuaveiro/curso07/spark_tmp") \
-    .config("spark.memory.fraction", "0.8") \
     .getOrCreate()
 
 # read the data
@@ -109,7 +111,15 @@ neighbors_cosine = neighbors.withColumn(
     "cosine_sim"
 )
 reverse = neighbors_cosine.selectExpr("movie_j as movie_i", "movie_i as movie_j", "cosine_sim")
-similarities = neighbors_cosine.union(reverse)
+similarities = neighbors_cosine \
+    .union(reverse) \
+    .withColumn("rank", row_number().over(Window.partitionBy("movie_i").orderBy(col("cosine_sim").desc()))) \
+    .filter(col("rank") <= 100) \
+    .drop("rank")
+
+# filter the similarities to only include movies in the test set
+test_movies = test.select("movieId").distinct()
+similarities = similarities.join(test_movies, similarities.movie_i == test_movies.movieId)
 
 # get the predictions (check prototype for more details)
 test_with_ratings = test.alias("t") \
