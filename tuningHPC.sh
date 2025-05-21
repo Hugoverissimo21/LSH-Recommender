@@ -27,3 +27,4 @@ spark-submit \
 # limpa diretório após execução
 rm -rf "$TMPDIR"
 sleep 5
+

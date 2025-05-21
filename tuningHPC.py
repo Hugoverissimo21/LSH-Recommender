@@ -256,6 +256,8 @@ for i, hyperparameter in enumerate(hyperparameters):
             "mae": avg_mae / n_validations,
             "time": avg_time / n_validations
         }
+        with open("tuningHPC.json", 'w') as f:
+            json.dump(results, f, indent=4)
 
 # %%
 with open("tuningHPC.json", 'w') as f:

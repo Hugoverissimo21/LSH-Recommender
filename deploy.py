@@ -51,7 +51,6 @@ spark = SparkSession.builder \
     .config("spark.memory.fraction", "0.9") \
     .config("spark.shuffle.spill.compress", "true") \
     .config("spark.shuffle.compress", "true") \
-    .config("spark.local.dir", "/users5/uvlabuaveiro/curso07/spark_tmp") \
     .getOrCreate()
 
 # read the data

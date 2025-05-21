@@ -1,0 +1,191 @@
+{
+    "(1.0, 7, 0.7)": {
+        "bucketLength": 1.0,
+        "numHashTables": 7,
+        "threshold": 0.7,
+        "n_validations": 5,
+        "rmse": 1.259556116721996,
+        "mae": 1.0215643856740277,
+        "time": 158.43800000000002
+    },
+    "(1.7, 3, 0.4)": {
+        "bucketLength": 1.7,
+        "numHashTables": 3,
+        "threshold": 0.4,
+        "n_validations": 5,
+        "rmse": 1.259556116721996,
+        "mae": 1.0215643856740277,
+        "time": 116.624
+    },
+    "(1.2, 8, 0.5)": {
+        "bucketLength": 1.2,
+        "numHashTables": 8,
+        "threshold": 0.5,
+        "n_validations": 5,
+        "rmse": 1.259556116721996,
+        "mae": 1.0215643856740277,
+        "time": 161.956
+    },
+    "(0.9, 1, 1.0)": {
+        "bucketLength": 0.9,
+        "numHashTables": 1,
+        "threshold": 1.0,
+        "n_validations": 5,
+        "rmse": 1.2127048460672423,
+        "mae": 0.9624762474849644,
+        "time": 173.562
+    },
+    "(1.5, 2, 0.7)": {
+        "bucketLength": 1.5,
+        "numHashTables": 2,
+        "threshold": 0.7,
+        "n_validations": 5,
+        "rmse": 1.259556116721996,
+        "mae": 1.0215643856740277,
+        "time": 112.926
+    },
+    "(1.5, 8, 0.6)": {
+        "bucketLength": 1.5,
+        "numHashTables": 8,
+        "threshold": 0.6,
+        "n_validations": 5,
+        "rmse": 1.259556116721996,
+        "mae": 1.0215643856740277,
+        "time": 163.22799999999998
+    },
+    "(1.9, 6, 0.9)": {
+        "bucketLength": 1.9,
+        "numHashTables": 6,
+        "threshold": 0.9,
+        "n_validations": 5,
+        "rmse": 1.2493520270251222,
+        "mae": 1.0081546237286243,
+        "time": 162.192
+    },
+    "(1.4, 7, 0.3)": {
+        "bucketLength": 1.4,
+        "numHashTables": 7,
+        "threshold": 0.3,
+        "n_validations": 5,
+        "rmse": 1.2595569128537547,
+        "mae": 1.0215663950982272,
+        "time": 157.796
+    },
+    "(1.7, 6, 0.1)": {
+        "bucketLength": 1.7,
+        "numHashTables": 6,
+        "threshold": 0.1,
+        "n_validations": 5,
+        "rmse": 1.2595569128537547,
+        "mae": 1.0215663950982272,
+        "time": 144.202
+    },
+    "(1.1, 4, 0.9)": {
+        "bucketLength": 1.1,
+        "numHashTables": 4,
+        "threshold": 0.9,
+        "n_validations": 5,
+        "rmse": 1.2493520270251222,
+        "mae": 1.0081546237286243,
+        "time": 149.152
+    },
+    "(0.7, 3, 0.3)": {
+        "bucketLength": 0.7,
+        "numHashTables": 3,
+        "threshold": 0.3,
+        "n_validations": 5,
+        "rmse": 1.2595569128537547,
+        "mae": 1.0215663950982272,
+        "time": 119.58400000000002
+    },
+    "(1.9, 8, 0.7)": {
+        "bucketLength": 1.9,
+        "numHashTables": 8,
+        "threshold": 0.7,
+        "n_validations": 5,
+        "rmse": 1.259556116721996,
+        "mae": 1.0215643856740277,
+        "time": 165.51
+    },
+    "(1.3, 7, 1.1)": {
+        "bucketLength": 1.3,
+        "numHashTables": 7,
+        "threshold": 1.1,
+        "n_validations": 5,
+        "rmse": 1.0944315627510162,
+        "mae": 0.8425984678440817,
+        "time": 319.526
+    },
+    "(1.8, 4, 0.8)": {
+        "bucketLength": 1.8,
+        "numHashTables": 4,
+        "threshold": 0.8,
+        "n_validations": 5,
+        "rmse": 1.259496599285653,
+        "mae": 1.0214868714910144,
+        "time": 125.174
+    },
+    "(1.4, 5, 0.5)": {
+        "bucketLength": 1.4,
+        "numHashTables": 5,
+        "threshold": 0.5,
+        "n_validations": 5,
+        "rmse": 1.259556116721996,
+        "mae": 1.0215643856740277,
+        "time": 126.46199999999999
+    },
+    "(0.8, 1, 0.3)": {
+        "bucketLength": 0.8,
+        "numHashTables": 1,
+        "threshold": 0.3,
+        "n_validations": 5,
+        "rmse": 1.2595569128537547,
+        "mae": 1.0215663950982272,
+        "time": 105.96400000000001
+    },
+    "(0.6, 8, 1.2)": {
+        "bucketLength": 0.6,
+        "numHashTables": 8,
+        "threshold": 1.2,
+        "n_validations": 5,
+        "rmse": 1.0678252869464222,
+        "mae": 0.8240409678699047,
+        "time": 301.21400000000006
+    },
+    "(0.6, 4, 0.4)": {
+        "bucketLength": 0.6,
+        "numHashTables": 4,
+        "threshold": 0.4,
+        "n_validations": 5,
+        "rmse": 1.259556116721996,
+        "mae": 1.0215643856740277,
+        "time": 121.224
+    },
+    "(0.8, 3, 0.5)": {
+        "bucketLength": 0.8,
+        "numHashTables": 3,
+        "threshold": 0.5,
+        "n_validations": 5,
+        "rmse": 1.259556116721996,
+        "mae": 1.0215643856740277,
+        "time": 116.62
+    },
+    "(1.8, 8, 0.1)": {
+        "bucketLength": 1.8,
+        "numHashTables": 8,
+        "threshold": 0.1,
+        "n_validations": 5,
+        "rmse": 1.2595569128537547,
+        "mae": 1.0215663950982272,
+        "time": 170.93200000000002
+    },
+    "(0.8, 1, 1.1)": {
+        "bucketLength": 0.8,
+        "numHashTables": 1,
+        "threshold": 1.1,
+        "n_validations": 5,
+        "rmse": 1.1173059555833904,
+        "mae": 0.8629597981348441,
+        "time": 287.24799999999993
+    }
+}
