@@ -9,8 +9,8 @@ mkdir -p "$TMPDIR_BASE"
 
 for i in {1..2}; do
     echo "=== Iteração $i ==="
-    for file in data/100k.csv data/1M.csv data/10M.csv data/20M.csv data/25M.csv; do
-        for repart in 1 2 4 8 16; do
+    for file in data/25M.csv data/10M.csv data/20M.csv data/1M.csv; do
+        for repart in 2 4 8 16; do
             echo "=== Repartitions $repart ==="
         
             # cria diretório temporário único para esta execução

@@ -188,3 +188,4 @@ updated.to_csv(saved_metrics_file, index=False)
 
 # === Clean up ===
 spark.stop()
+
