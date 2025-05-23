@@ -9,28 +9,24 @@ mkdir -p "$TMPDIR_BASE"
 
 for i in {1..2}; do
     echo "=== Iteração $i ==="
-    for file in data/25M.csv data/10M.csv data/20M.csv data/1M.csv; do
-        for repart in 2 4 8 16; do
-            echo "=== Repartitions $repart ==="
-        
-            # cria diretório temporário único para esta execução
-            TMPDIR="$TMPDIR_BASE/$(date +%s%N)"
-            mkdir -p "$TMPDIR"
+    for file in data/25M.csv data/10M.csv data/20M.csv data/1M.csv data/100k.csv; do
+        # cria diretório temporário único para esta execução
+        TMPDIR="$TMPDIR_BASE/$(date +%s%N)"
+        mkdir -p "$TMPDIR"
 
-            echo "Running on $file using tmpdir=$TMPDIR"
+        echo "Running on $file using tmpdir=$TMPDIR"
 
-            # executa spark-submit com variáveis forçadas para diretório temporário
-            SPARK_LOCAL_DIRS="$TMPDIR" TMPDIR="$TMPDIR" \
-            spark-submit \
-                --master local[8] \
-                --conf spark.local.dir="$TMPDIR" \
-                --conf spark.driver.extraJavaOptions="-Djava.io.tmpdir=$TMPDIR" \
-                --conf spark.executorEnv.TMPDIR="$TMPDIR" \
-                deployv2.py "$file" -repartitions "$repart"
+        # executa spark-submit com variáveis forçadas para diretório temporário
+        SPARK_LOCAL_DIRS="$TMPDIR" TMPDIR="$TMPDIR" \
+        spark-submit \
+            --master local[8] \
+            --conf spark.local.dir="$TMPDIR" \
+            --conf spark.driver.extraJavaOptions="-Djava.io.tmpdir=$TMPDIR" \
+            --conf spark.executorEnv.TMPDIR="$TMPDIR" \
+            deployv3.py "$file"
 
-            # limpa diretório após execução
-            rm -rf "$TMPDIR"
-            sleep 5
-        done
+        # limpa diretório após execução
+        rm -rf "$TMPDIR"
+        sleep 5
     done
 done
