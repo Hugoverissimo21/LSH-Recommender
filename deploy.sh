@@ -23,7 +23,7 @@ for i in {1..2}; do
             --conf spark.local.dir="$TMPDIR" \
             --conf spark.driver.extraJavaOptions="-Djava.io.tmpdir=$TMPDIR" \
             --conf spark.executorEnv.TMPDIR="$TMPDIR" \
-            deployv3.py "$file"
+            deploy.py "$file"
 
         # limpa diretório após execução
         rm -rf "$TMPDIR"
