@@ -24,6 +24,7 @@ parser.add_argument("input_file", help="Path to input file")
 parser.add_argument("-bucketLength", type=float, default=2.0, help="LSH parameter: bucket length (default: 2.0)")
 parser.add_argument("-numHashTables", type=int, default=1, help="LSH parameter: number of hash tables (default: 1)")
 parser.add_argument("-threshold", type=float, default=1.2, help="Recommendation similarity threshold (default: 1.2)")
+parser.add_argument("-repartitions", type=int, default=8, help="")
 
 args = parser.parse_args()
 
@@ -35,9 +36,10 @@ input_file = args.input_file
 bucket_length = args.bucketLength
 num_hash_tables = args.numHashTables
 threshold = args.threshold
+repartitions = args.repartitions
 
-saved_results_folder = "results"
-saved_metrics_file = "results.csv"
+saved_results_folder = "deployHPC"
+saved_metrics_file = "deployHPC.csv"
 
 
 # === Main Code ===
@@ -59,6 +61,8 @@ data = spark.read.csv(input_file, header=True, inferSchema=True) \
 
 # split in train and test
 train, test = data.randomSplit([0.9, 0.1])
+train = train.repartition(repartitions)
+test = test.repartition(repartitions)
 
 # start timer
 start = time.time()
@@ -133,7 +137,7 @@ test_with_ratings = test.alias("t") \
     )
 predictions = test_with_ratings.groupBy("userId", "target_movie").agg(
     (sql_sum(col("cosine_sim") * col("neighbor_rating")) / sql_sum(col("cosine_sim"))).alias("pred_rating")
-)
+).repartition(repartitions)
 final = predictions.alias("p").join(
     test.alias("t"),
     (col("p.userId") == col("t.userId")) & (col("p.target_movie") == col("t.movieId")),
@@ -143,7 +147,7 @@ final = predictions.alias("p").join(
     col("t.movieId"),
     coalesce(col("p.pred_rating"), lit(3.0)).alias("pred_rating"),
     col("t.rating").alias("actual_rating")
-)
+).repartition(repartitions)
 
 # evaluate the predictions (check prototype for more details)
 evaluator = RegressionEvaluator(metricName="rmse", labelCol="actual_rating", predictionCol="pred_rating")
@@ -168,6 +172,7 @@ metrics = {"input_file": input_file,
            "bucket_length": bucket_length,
            "num_hash_tables": num_hash_tables,
            "threshold": threshold,
+           "repartitions": repartitions,
            "timestamp": time.strftime("%Y%m%d_%H%M%S"), 
            }
 new_row = pd.DataFrame([metrics])
@@ -183,3 +188,4 @@ updated.to_csv(saved_metrics_file, index=False)
 
 # === Clean up ===
 spark.stop()
+
