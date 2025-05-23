@@ -40,7 +40,7 @@ This project implements an item-item collaborative filtering recommender system 
 
     - `deploy vlocal.py`<br>........................................................
 
-- `data/` and `zextra`<br>....................................................
+- `data/` and `assets/`<br>Contain auxiliary files.
 
 **Note:** Code may vary slightly between stages (prototype -> tuning -> deploy), but the core logic remains the same.
 
