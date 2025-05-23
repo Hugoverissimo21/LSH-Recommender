@@ -18,6 +18,20 @@ This project implements an item-item collaborative filtering recommender system 
 
 ## Methodology and Results
 
+comecei por fazer um prototpio localmente, com o 100k por ser o mais pequeno, tudo bem documentado no devido ficheiro (`prototype.ipynb`)
+
+pelo facto de ter hyperapraemtros decidi fazer um partial cross validation, com o mesmo dataset, para ter uma ideia da melhor configuracao, e ao ter bons resultados com uma das configuracoes, tanto a nivel de rmse como de tempo, decidi avancar para o deploy para poder usar o sparl-submit
+
+com a possiblidade de usar o HPC decidi fazer isso, contudo os resultados estavam mt a quem do esperado, comparando a execucao local com o hpc, os resultados do rmse eram smp mt piores, constantemente
+
+inicialmente pensei que poderia ser devido a escolha dos hiperparementros pelas hash fuctions poderem variar entre os computadores, ent fiz um tunning no hpc, mas ao ver q os resultados continuavam a ser mt piores, ao investigar mais reparei que havia um problema q era a constante selecao do defaulta rating (3.0) por falta de vizinhos, apesar de existirem
+
+isto acontecia por ter demasiadas particoes (>100) e ele falhar em encontrar os vizinhos em particoes diferentes, algo que nao acontecia localemnte por nao ser em tao larga escala (mas demorar mais tempo)
+
+decidi entao tbm definir o numero de reparticoes e testar configuracoes diferentes, melhorando os resultado mas nao tanto bons como ao nivel local
+
+METER GRAFICOS E ISSO PARA SUSTENTAR AS COISAS QUE DIGO
+
 .........................................
 
 ## Project Structure
