@@ -1,4 +1,4 @@
-# LSH-Based Recommender System for MovieLens
+# [LSH-Based Recommender System for MovieLens](https://github.com/Hugoverissimo21/LSH-Recommender)
 
 ## Overview
 
@@ -30,12 +30,11 @@ isto acontecia por ter demasiadas particoes (>100) e ele falhar em encontrar os 
 
 decidi entao tbm definir o numero de reparticoes e testar configuracoes diferentes, melhorando ligeiramente os resultados, diminuindo o desvio padrao, mas continuando a ser mt piores que os resultados locais
 
-METER GRAFICOS E ISSO PARA SUSTENTAR AS COISAS QUE DIGO
+![Results: HPC, RMSE/size, Spark Repartitions](assets/results_rmse_spark_choice_hpc.png)
+![Results: HPC, RMSE/size, Manual Repartitions](assets/results_rmse_small_manual_repartitioning_hpc.png)
 
-image:
+falta correr no pc, ou concluir
 
-![Results: HPC, RMSE/size, Spark Repartigions](assets/results_rmse_spark_choice_hpc.png)
-![LSH Recommender System Overview](assets/results_rmse_small_manual_repartitioning_hpc.png)
 
 .........................................
 
