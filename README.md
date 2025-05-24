@@ -28,9 +28,14 @@ inicialmente pensei que poderia ser devido a escolha dos hiperparementros pelas 
 
 isto acontecia por ter demasiadas particoes (>100) e ele falhar em encontrar os vizinhos em particoes diferentes, algo que nao acontecia localemnte por nao ser em tao larga escala (mas demorar mais tempo)
 
-decidi entao tbm definir o numero de reparticoes e testar configuracoes diferentes, melhorando os resultado mas nao tanto bons como ao nivel local
+decidi entao tbm definir o numero de reparticoes e testar configuracoes diferentes, melhorando ligeiramente os resultados, diminuindo o desvio padrao, mas continuando a ser mt piores que os resultados locais
 
 METER GRAFICOS E ISSO PARA SUSTENTAR AS COISAS QUE DIGO
+
+image:
+
+![Results: HPC, RMSE/size, Spark Repartigions](assets/results_rmse_spark_choice_hpc.png)
+![LSH Recommender System Overview](assets/results_rmse_small_manual_repartitioning_hpc.png)
 
 .........................................
 
