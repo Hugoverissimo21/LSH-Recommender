@@ -38,22 +38,37 @@ num_hash_tables = args.numHashTables
 threshold = args.threshold
 repartitions = args.repartitions
 
-saved_results_folder = "deployHPC"
-saved_metrics_file = "deployHPC.csv"
-
-
 # === Main Code ===
 # create spark session
-spark = SparkSession.builder \
-    .appName("ItemItemCF") \
-    .master("local[8]") \
-    .config("spark.executor.cores", "8") \
-    .config("spark.driver.memory", "50g") \
-    .config("spark.executor.memory", "50g") \
-    .config("spark.memory.fraction", "0.9") \
-    .config("spark.shuffle.spill.compress", "true") \
-    .config("spark.shuffle.compress", "true") \
-    .getOrCreate()
+if True:  # HPC settings
+    spark = SparkSession.builder \
+        .appName("ItemItemCF") \
+        .master("local[8]") \
+        .config("spark.executor.cores", "8") \
+        .config("spark.driver.memory", "50g") \
+        .config("spark.executor.memory", "50g") \
+        .config("spark.memory.fraction", "0.9") \
+        .config("spark.shuffle.spill.compress", "true") \
+        .config("spark.shuffle.compress", "true") \
+        .getOrCreate()
+    
+    saved_results_folder = "deployHPC"
+    saved_metrics_file = "deployHPC.csv"
+
+if False: # LOC settings
+    spark = SparkSession.builder \
+        .appName("ItemItemCF") \
+        .master("local[4]") \
+        .config("spark.executor.cores", "4") \
+        .config("spark.driver.memory", "8g") \
+        .config("spark.executor.memory", "8g") \
+        .config("spark.memory.fraction", "0.9") \
+        .config("spark.shuffle.spill.compress", "true") \
+        .config("spark.shuffle.compress", "true") \
+        .getOrCreate()
+    
+    saved_results_folder = "deployLOC"
+    saved_metrics_file = "deployLOC.csv"
 
 # read the data
 data = spark.read.csv(input_file, header=True, inferSchema=True) \
@@ -117,12 +132,12 @@ reverse = neighbors_cosine.selectExpr("movie_j as movie_i", "movie_i as movie_j"
 similarities = neighbors_cosine \
     .union(reverse) \
     .withColumn("rank", row_number().over(Window.partitionBy("movie_i").orderBy(col("cosine_sim").desc()))) \
-    .filter(col("rank") <= 100) \
+    .filter(col("rank") <= 250) \
     .drop("rank")
 
 # filter the similarities to only include movies in the test set
-test_movies = test.select("movieId").distinct()
-similarities = similarities.join(test_movies, similarities.movie_i == test_movies.movieId)
+#test_movies = test.select("movieId").distinct()
+#similarities = similarities.join(test_movies, similarities.movie_i == test_movies.movieId)
 
 # get the predictions (check prototype for more details)
 test_with_ratings = test.alias("t") \
