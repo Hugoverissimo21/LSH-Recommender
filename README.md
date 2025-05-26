@@ -14,9 +14,11 @@ This project implements an item-item collaborative filtering recommender system 
 
 - PySpark-based for distributed computation.
 
-- Modular design for tuning, evaluation, and export.
+- Modular design for tuning and evaluation.
 
 ## Methodology and Results
+
+all the movielens were converted to csv files, e.g. `100k.csv`, `1M.csv`, etc.
 
 comecei por fazer um prototpio localmente, com o 100k por ser o mais pequeno, tudo bem documentado no devido ficheiro (`prototype.ipynb`)
 
@@ -30,13 +32,12 @@ isto acontecia por ter demasiadas particoes (>100) e ele falhar em encontrar os 
 
 decidi entao tbm definir o numero de reparticoes e testar configuracoes diferentes, melhorando ligeiramente os resultados, diminuindo o desvio padrao, mas continuando a ser mt piores que os resultados locais
 
-![Results: HPC, RMSE/size, Spark Repartitions](assets/results_rmse_spark_choice_hpc.png)
-![Results: HPC, RMSE/size, Manual Repartitions](assets/results_rmse_small_manual_repartitioning_hpc.png)
+![Results](assets/results_rmse_comparison.png)
 
-falta correr no pc, ou concluir
+.....
 
 
-.........................................
+
 
 ## Project Structure
 
@@ -56,7 +57,9 @@ falta correr no pc, ou concluir
 
     - `deployHPC/`<br>Directory containing the predicted ratings generated from the HPC run.
 
-    - `deploy vlocal.py`<br>........................................................
+    - `deployLOC.csv`<br>Output file containing result metrics generated from the local run.
+
+    - `deployLOC/`<br>Directory containing the predicted ratings generated from the local run.
 
 - `data/` and `assets/`<br>Contain auxiliary files.
 
