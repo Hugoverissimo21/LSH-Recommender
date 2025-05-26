@@ -18,26 +18,27 @@ This project implements an item-item collaborative filtering recommender system 
 
 ## Methodology and Results
 
-all the movielens were converted to csv files, e.g. `100k.csv`, `1M.csv`, etc.
+The first step was to download all the MovieLens datasets, which are available in various sizes (100K, 1M, 10M, 20M, and 25M). Not all the datasets were `.csv`, so `pandas` was used to convert them to `.csv` format.
 
-comecei por fazer um prototpio localmente, com o 100k por ser o mais pequeno, tudo bem documentado no devido ficheiro (`prototype.ipynb`)
+Then, a `prototype.ipynb` was used to create a local prototype using the smallest dataset (100K). This notebook is well-documented and serves as a foundation for understanding the implementation.
 
-pelo facto de ter hyperapraemtros decidi fazer um partial cross validation, com o mesmo dataset, para ter uma ideia da melhor configuracao, e ao ter bons resultados com uma das configuracoes, tanto a nivel de rmse como de tempo, decidi avancar para o deploy para poder usar o sparl-submit
+Since, the hyperparameters (similarity thresholds, number of hash functions and length of each hash bucket) were empirically chosen, the next step was to perform hyperparameter tuning (`tuning.ipynb`), with the 100K dataset locally, using a partial cross-validation approach to evaluate different configurations. The dataset was split into 10 folds but only 5 passed by the validation step to avoid extensive computation time. The best configuration was selected based on RMSE and execution time.
 
-com a possiblidade de usar o HPC decidi fazer isso, contudo os resultados estavam mt a quem do esperado, comparando a execucao local com o hpc, os resultados do rmse eram smp mt piores, constantemente
+After this tunning, a `deploy.py` was used to run the optimized version of the recommender system, both locally and on a high-performance computer (HPC), using `spark-submit` and all the MovieLens datasets.
 
-inicialmente pensei que poderia ser devido a escolha dos hiperparementros pelas hash fuctions poderem variar entre os computadores, ent fiz um tunning no hpc, mas ao ver q os resultados continuavam a ser mt piores, ao investigar mais reparei que havia um problema q era a constante selecao do defaulta rating (3.0) por falta de vizinhos, apesar de existirem
+Comparing the results of the local execution with the HPC execution, it was expected that they would be similar, but they were not. The local execution had a much lower RMSE than the HPC execution. Since the code was the same, apart from the Spark initialization (due to RAM, cores, etc.), some hypothesis were made to explain this discrepancy:
 
-isto acontecia por ter demasiadas particoes (>100) e ele falhar em encontrar os vizinhos em particoes diferentes, algo que nao acontecia localemnte por nao ser em tao larga escala (mas demorar mais tempo)
+- different hash functions between local and HPC executions, leading to different hyperparameter choices
 
-decidi entao tbm definir o numero de reparticoes e testar configuracoes diferentes, melhorando ligeiramente os resultados, diminuindo o desvio padrao, mas continuando a ser mt piores que os resultados locais
+- repartitioning issues on the HPC, where the number of partitions was too high, leading to difficulties in finding neighbors across partitions
 
-![Results](assets/results_rmse_comparison.png)
+These hypothesis were rejected, as HPC performance remained significantly worse than local execution, even after hyperparameter tuning and controlling the number of repartitions on the HPC.
 
-.....
+The RMSE and execution times are presented above, between all the datasets and approaches.
 
+![results](assets/results_rmse_comparison.png)
 
-
+It's clear that the local execution performed better than the HPC execution, with a much lower RMSE but a higher execution time, not even being able to finish the 20+M datasets. Besides that, the HPC problem cause remains unidentified and it is also puzzling that executing the 100k dataset takes as long as the 25M dataset.
 
 ## Project Structure
 
