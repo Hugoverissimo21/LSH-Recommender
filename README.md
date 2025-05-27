@@ -34,9 +34,9 @@ Comparing the results of the local execution with the HPC execution, it was expe
 
 These hypothesis were rejected, as HPC performance remained significantly worse than local execution, even after hyperparameter tuning and controlling the number of repartitions on the HPC.
 
-The RMSE and execution times are presented above, between all the datasets and approaches.
-
 ![results](assets/results_rmse_comparison.png)
+
+The RMSE and execution times are presented above, between all the datasets and approaches.
 
 It's clear that the local execution performed better than the HPC execution, with a much lower RMSE but a higher execution time, not even being able to finish the 20+M datasets. Besides that, the HPC problem cause remains unidentified and it is also puzzling that executing the 100k dataset takes as long as the 25M dataset.
 
