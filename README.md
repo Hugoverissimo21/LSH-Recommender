@@ -18,11 +18,11 @@ This project implements an item-item collaborative filtering recommender system 
 
 ## Methodology and Results
 
-The first step was to download all the MovieLens datasets, which are available in various sizes (100K, 1M, 10M, 20M, and 25M). Not all the datasets were `.csv`, so `pandas` was used to convert them to `.csv` format.
+The first step was to download all the MovieLens datasets, which are available in various sizes (100K, 1M, 10M, 20M, and 25M). Not all the datasets were `.csv`, so `pandas` was used to convert them to `.csv` format (`data/to_csv.ipynb`).
 
 Then, a `prototype.ipynb` was used to create a local prototype using the smallest dataset (100K). This notebook is well-documented and serves as a foundation for understanding the implementation.
 
-Since, the hyperparameters (similarity thresholds, number of hash functions and length of each hash bucket) were empirically chosen, the next step was to perform hyperparameter tuning (`tuning.ipynb`), with the 100K dataset locally, using a partial cross-validation approach to evaluate different configurations. The dataset was split into 10 folds but only 5 passed by the validation step to avoid extensive computation time. The best configuration was selected based on RMSE and execution time.
+Since the hyperparameters (similarity thresholds, number of hash functions and length of each hash bucket) were empirically chosen, the next step was to perform hyperparameter tuning (`tuning.ipynb`), with the 100K dataset locally, using a partial cross-validation approach to evaluate different configurations. The dataset was split into 10 folds but only 5 passed by the validation step to avoid extensive computation time. The best configuration was selected based on RMSE and execution time.
 
 After this tunning, a `deploy.py` was used to run the optimized version of the recommender system, both locally and on a high-performance computer (HPC), using `spark-submit` and all the MovieLens datasets.
 
